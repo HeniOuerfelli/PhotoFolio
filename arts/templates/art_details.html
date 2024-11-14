@@ -130,7 +130,22 @@
       <nav class="breadcrumbs">
         <div class="container">
           <ol>
-            <li><a href="{% url 'gallery' %}">Retourner</a></li>
+            <li>
+                {% if user.is_authenticated %}
+                {% if not user.is_artist %}
+                <a href="{% url 'gallery' %}">Retourner</a>
+                {% elif user.is_artist and art.owner.username == user.username %}
+                  <!-- If user is an artist and the art belongs to them, link to 'Votre Gallery' -->
+                  <a href="{% url 'list_arts' %}">Retourner</a>
+                {% else %}
+                  <!-- If user is an artist but this is not their art, link to the general gallery -->
+                  <a href="{% url 'gallery' %}">Retourner</a>
+                {% endif %}
+              {% else %}
+                <!-- If user is not connected, link to the general gallery -->
+                <a href="{% url 'gallery' %}">Retourner</a>
+              {% endif %}
+            </li>
             <li class="current">Gallery Single</li>
           </ol>
         </div>
