@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Home Page</title>
+  <title>About Page</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -50,14 +50,14 @@
             {% else %}
               <h1 class="sitename">PhotoFolio</h1>
             {% endif %}
-          </a>      
+          </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{% url 'home' %}">Home<br></a></li>
-          <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'home' %}" onclick="stayOnHome()" >Home<br></a></li>
+          <li><a href="{% url 'about' %}" class="active">About</a></li>
           {% if user.is_authenticated and user.is_artist %}
-            <li><a href="{% url 'list_arts' %}" class="active">Votre Gallery</a></li>
+            <li><a href="{% url 'list_arts' %}">Votre Gallery</a></li>
           {% endif %}
           <li class="dropdown"><a href="{% url 'gallery' %}"><span>Gallery</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
@@ -106,61 +106,48 @@
         <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
         <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
         {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+        {% url 'logout' as cancel_url %}
+        <button type="button" class="btn btn-primary" onclick="window.location.href='{{ cancel_url }}'">Logout</button>
       {% endif %}
+
       </div>
 
     </div>
   </header>
-<section id="gallery" class="gallery section">
-  <div class="container d-flex justify-content-end mb-4">
-        <a href="{% url 'create_art' %}" class="btn btn-primary">Add Art</a>
-</div>
-    <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
 
-      <div class="row gy-4 justify-content-center">
-        {% for art in arts %}
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="gallery-item h-100">
-                    {% if art.is_image %}
-                        <!-- Affichage d'une image -->
-                        <img src="{{ art.file.url }}" class="img-fluid" alt="{{ art.title }}">
-                    {% elif art.is_video %}
-                        <!-- Affichage d'une vidéo -->
-                        <video controls class="img-fluid">
-                            <source src="{{ art.file.url }}" type="video/mp4">
-                            Votre navigateur ne prend pas en charge les vidéos HTML5.
-                        </video>
-                    {% else %}
-                        <p>Type de fichier non pris en charge.</p>
-                    {% endif %}
-    
-                    <div class="gallery-links d-flex align-items-center justify-content-center">
-                        <a href="{{ art.file.url }}" title="{{ art.title }}" class="glightbox preview-link">
-                            <i class="bi bi-arrows-angle-expand"></i>
-                        </a>
-                        <form method="post" action="{% url 'delete_art' art.id %}" id="delete-form-{{ art.id }}">
-                            {% csrf_token %}
-                            <a href="#" onclick="document.getElementById('delete-form-{{ art.id }}').submit();" class="details-link">
-                                <i class="bi bi-trash"></i>
-                            </a>
-                        </form>
-                        <a href="{% url 'update_art' art.id %}" class="details-link update-link">
-                            <i class="bi bi-pencil"></i>
-                        </a>
-                        <a href="{% url 'details_arts' art.id %}" class="details-link">
-                            <i class="bi bi-link-45deg"></i>
-                        </a>
-                        <h1>{{ art.title }}</h1>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    </div>
+  <main class="main">
 
-</section><!-- /Gallery Section -->
-<footer id="footer" class="footer">
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-delay="100">
+            <h2><span> About </span><span class="underlight">PhotoFolio</span><br> – A World of Art at Your Fingertips <br>
+                <em>Discover, Connect, and Collect Exceptional Art.</em></h2>
+              <h3><b> Our Mission </b></h3>
+            <p> PhotoFolio was created to bridge the gap between artists and art lovers from every corner of the globe. Our mission is to make art accessible, breaking down physical and geographical barriers so that anyone can explore and enjoy high-quality art wherever they are.</p>
+              <h3><b>What We Offer</b></h3>
+              <p>Our platform serves as a virtual gallery, showcasing diverse artworks that span multiple genres and styles. Whether you're interested in traditional paintings, digital creations, sculptures, or photography, <strong> PhotoFolio </strong> brings a curated selection right to your screen. Our easy-to-navigate platform allows users to:</p><br>
+    <ul>
+    <li><strong>Browse Collections:</strong> Discover pieces from established and emerging artists, handpicked for their uniqueness and quality.</li>
+    <li><strong>Purchase Artworks:</strong> Securely buy original works and prints, with options for various formats and sizes to suit your space and style.</li>
+    <li><strong>Stay Engaged:</strong> Join a global community of art enthusiasts, get exclusive updates on new collections, and participate in events.</li>
+          </ul>
+              <h3><b> Our Values </b></h3>
+              <p><strong>Accessibility, Authenticity, Community, and Creativity.</strong></p>
+        <p>We believe art should be experienced by everyone, everywhere. That’s why we focus on providing an authentic, inclusive experience where creativity can thrive, and art becomes part of everyday life.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /Welcome Section -->
+
+
+  </main>
+
+  <footer id="footer" class="footer">
 
     <div class="container">
       <div class="copyright text-center ">

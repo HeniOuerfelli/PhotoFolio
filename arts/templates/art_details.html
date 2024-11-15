@@ -266,7 +266,11 @@
                   <li><strong>Client</strong> </li>
                   <li><strong> Price</strong> {{art.price}} </li>
                   <li><strong>Project URL</strong> <a href="#">www.example.com</a></li>
-                  <li>{{paypal.render}}</li>
+                  {% if user.is_artist and art.owner.username == user.username %}
+                  {% else %}
+                      <li>{{paypal.render}}</li>
+                  {% endif %}
+                 
               </ul>
             </div>
           </div>

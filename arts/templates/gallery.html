@@ -55,7 +55,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="{% url 'home' %}">Home<br></a></li>
-          <li><a href="about.html">About</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
           {% if user.is_authenticated and user.is_artist %}
             <li><a href="{% url 'list_arts' %}" >Votre Gallery</a></li>
           {% endif %}

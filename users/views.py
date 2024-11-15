@@ -34,6 +34,9 @@ class UserDetails(LoginRequiredMixin, DetailView):
 class HomeView(LoginRequiredMixin,TemplateView):
 
     template_name = "home.html"
+class AboutView(LoginRequiredMixin,TemplateView):
+
+    template_name = "about.html"
 
 class CustomLogoutView(LogoutView):
 
