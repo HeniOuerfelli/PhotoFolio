@@ -1,4 +1,5 @@
 Dependencies
+
 	transformers v4.0
 	torch v1.0
 	matplotlib v3.0
@@ -12,4 +13,5 @@ Dependencies
 	pillow v11.0.0
 
 Install Requirements
+
 	pip install -r requirements.txt
