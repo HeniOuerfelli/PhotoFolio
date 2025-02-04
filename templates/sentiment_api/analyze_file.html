@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Analyse de sentiment</title>
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <main class="main">
+    <div class="container mt-5">
+      <section id="contact" class="contact section">
+        <h1>Analyse de sentiment - Fichier</h1>
+
+        <!-- Formulaire d'upload -->
+        <form method="post" enctype="multipart/form-data" id="uploadForm" class="php-email-form aos-init aos-animate" data-aos="fade-up" data-aos-delay="300">
+          {% csrf_token %}
+          <div class="row gy-4">
+            <div class="col-md-6">
+              <label for="file">Fichier</label>
+              <input type="file" name="file" accept=".csv, .json" class="form-control">
+            </div>
+          </div>
+
+          <br>
+          <button type="submit" class="btn btn-primary">Analyser</button>
+          <a href="{% url 'list_arts' %}" class="btn btn-secondary">Retourner</a>
+        </form>
+
+        <!-- Canvas Chart -->
+        <div class="mt-5">
+          <canvas id="sentimentChart" width="400" height="400" style="display:none;"></canvas>
+        </div>
+
+      </section>
+    </div>
+  </main>
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    const sentimentChart = document.getElementById('sentimentChart');
+
+    uploadForm.onsubmit = async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(uploadForm);
+
+      // Bloquer le bouton pour éviter plusieurs soumissions
+      const submitButton = uploadForm.querySelector('button[type="submit"]');
+      submitButton.textContent = 'Analyse en cours...';
+      submitButton.disabled = true;
+
+      try {
+        const response = await fetch("", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          alert(data.error);
+          return;
+        }
+
+        // Mise à jour du graphique
+        const ctx = sentimentChart.getContext('2d');
+        sentimentChart.style.display = 'block';
+
+        new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: Object.keys(data.counts),
+            datasets: [{
+              label: 'Sentiments',
+              data: Object.values(data.counts),
+              backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56'],
+            }]
+          },
+        });
+
+      } catch (error) {
+        alert("Une erreur s'est produite lors de l'analyse. Veuillez réessayer.");
+      } finally {
+        submitButton.textContent = 'Analyser';
+        submitButton.disabled = false;
+      }
+    };
+  </script>
+</body>
+
+</html>

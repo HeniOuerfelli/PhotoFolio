@@ -1,0 +1,23 @@
+<h1>Image Recognition Result</h1>
+
+<p><strong>Uploaded Image:</strong> {{ image }}</p>
+
+<p><strong>Most Similar Image:</strong> {{ most_similar_image }}</p>
+
+<p><strong>Similarity Scores:</strong>{{similarity_scores}}</p>
+<ul>
+    {% for image, score in similarity_scores.items %}
+        <li>{{ image }}: {{ score }}</li>
+    {% endfor %}
+</ul>
+<!-- Display the uploaded image -->
+{% load static %}
+<img src="{% static similar_image %}" alt="Uploaded Image" width="200">
+<!-- Display the most similar image -->
+<img src="{% static uploaded_image %}" alt="Most Similar Image" width="200">
+
+<!-- Optionally, display images for each comparison -->
+{% for image, score in similarity_scores1 %}
+    <p>Similarity score for: {{ image }} ({{ score }})</p>
+    <img src="{% static image %}" alt="Image" width="200">
+{% endfor %}
